@@ -44,14 +44,13 @@ class CocoCaptions1(data.Dataset):
             u'A mountain view with a plume of smoke in the background']
 
     """
-    def __init__(self, root, annFile, transform=None, target_transform=None, tokenizer=None):
+    def __init__(self, root, annFile, transform=None, target_transform=None):
         from pycocotools.coco import COCO
         self.root = os.path.expanduser(root)
         self.coco = COCO(annFile)
         self.ids = list(self.coco.imgs.keys())
         self.transform = transform
         self.target_transform = target_transform
-        self.tokenizer = tokenizer
 
     def __getitem__(self, index):
         """
@@ -74,9 +73,7 @@ class CocoCaptions1(data.Dataset):
             img = self.transform(img)
 
         target=target[0]
-        if self.target_transform == "tokenize":
-            target = self.tokenizer(target, return_tensors="pt", max_length=50, padding="max_length")
-        elif self.target_transform is not None:
+        if self.target_transform is not None:
             target = self.target_transform(target)
 
         return img, target
@@ -89,9 +86,7 @@ def get_mscoco_loader(config):
 
     mscoco = CocoCaptions1(root=config['imgPath'],
                            annFile=config['annPath'],
-                           transform=config['transforms'],
-                           target_transform="tokenize",
-                           tokenizer=config['tokenizer'])
+                           transform=config['transforms'])
 
     print('Number of samples: ', len(mscoco))
     img, captions = mscoco[1]  # load 4th sample
