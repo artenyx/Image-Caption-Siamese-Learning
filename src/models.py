@@ -142,11 +142,15 @@ class ImgCapModel(nn.Module):
 
     def forward(self, img, cap):
         img = self.vis_model(img)
-
+        print(type(cap))
         cap = self.gpt2_mod(**cap)
+        print(type(cap))
         cap = cap.last_hidden_state
+        print(type(cap))
         cap = self.flatten(cap)
+        print(type(cap))
         cap = self.lm_linear(cap)
+        print(type(cap))
 
         print("Img Out Shape:", img.shape, "Cap Out Shape:", cap.shape)
         return img, cap
