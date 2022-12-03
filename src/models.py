@@ -141,7 +141,7 @@ class ImgCapModel(nn.Module):
         self.lm_linear = nn.LazyLinear(512)
 
     def forward(self, img, cap):
-        img, __ = self.vis_model(img)
+        img = self.vis_model(img)
         cap = self.gpt2_mod(**cap)
         cap = cap.last_hidden_state
         cap = self.flatten(cap)
