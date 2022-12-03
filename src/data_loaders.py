@@ -65,6 +65,7 @@ class CocoCaptions1(data.Dataset):
         ann_ids = coco.getAnnIds(imgIds=img_id)
         anns = coco.loadAnns(ann_ids)
         target = [ann['caption'] for ann in anns]
+        print(target)
 
         path = coco.loadImgs(img_id)[0]['file_name']
 
