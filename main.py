@@ -1,7 +1,7 @@
-from src import data_loaders as data_loaders, get_config as get_config, ImgCapModel as ImgCapModel
+from src import data_loaders as data_loaders, get_config as get_config, models as models
 
-config = get_config.get_config()
-model = ImgCapModel(config=config).to(config['device'])
+config = get_config.get_exp_config()
+model = models.ImgCapModel(config=config).to(config['device'])
 
 mscoco_loader = data_loaders.get_mscoco_loader()
 for i, (img, caption) in enumerate(mscoco_loader):
