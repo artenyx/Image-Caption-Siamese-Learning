@@ -6,11 +6,10 @@ tokenizer = config['tokenizer']
 
 mscoco_loader = data_loaders.get_mscoco_loader(config)
 for i, (img, caption) in enumerate(mscoco_loader):
-    caption = tokenizer(caption, return_tensors="pt", max_length=50, padding="max_length")
-    print(caption.shape)
+    caption = tokenizer(caption, return_tensors="pt", max_length=50, padding="max_length").to(config['device'])
     img1 = img
     caption1 = caption
     if i == 0:
         break
 
-output = model(img1.to(config['device']), caption1.to(config['device']))
+output = model(img1.to(config['device']), caption1)
