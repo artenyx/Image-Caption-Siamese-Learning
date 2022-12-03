@@ -6,6 +6,7 @@ tokenizer = config['tokenizer']
 
 mscoco_loader = data_loaders.get_mscoco_loader(config)
 for i, (img, caption) in enumerate(mscoco_loader):
+    print(type(caption))
     caption = tokenizer(caption, return_tensors="pt", max_length=50, padding="max_length").to(config['device'])
     img1 = img
     caption1 = caption
