@@ -12,4 +12,4 @@ for i, (img, caption) in enumerate(mscoco_loader):
     if i == 0:
         break
 
-output = model(img1, caption1)
+output = model(img1.to(config['device']), caption1.to(config['device']))
