@@ -65,7 +65,7 @@ class CocoCaptions1(data.Dataset):
         ann_ids = coco.getAnnIds(imgIds=img_id)
         anns = coco.loadAnns(ann_ids)
         target = [ann['caption'] for ann in anns]
-        print(target)
+        target = target[0]
 
         path = coco.loadImgs(img_id)[0]['file_name']
 
@@ -73,7 +73,6 @@ class CocoCaptions1(data.Dataset):
         if self.transform is not None:
             img = self.transform(img)
 
-        target=target[0]
         if self.target_transform is not None:
             target = self.target_transform(target)
 
