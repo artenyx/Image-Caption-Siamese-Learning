@@ -10,7 +10,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class ImgCapModel(nn.Module):
     def __init__(self, config):
-        super().__init__()
+        super(ImgCapModel, self).__init__()
         self.vis_model = SimpleViT(
             image_size=32,
             patch_size=4,
