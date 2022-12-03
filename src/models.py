@@ -119,7 +119,7 @@ class SimpleViT(nn.Module):
         x = x.mean(dim=1)
 
         x = self.to_latent(x)
-        return x, self.linear_head(x)
+        return x #, self.linear_head(x)
 
 
 class ImgCapModel(nn.Module):
@@ -141,7 +141,7 @@ class ImgCapModel(nn.Module):
         self.lm_linear = nn.LazyLinear(512)
 
     def forward(self, img, cap):
-        img = self.vis_model(img)
+        img, __ = self.vis_model(img)
         print(type(cap))
         cap = self.gpt2_mod(**cap)
         print(type(cap))
