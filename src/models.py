@@ -4,8 +4,6 @@ from einops import rearrange
 from einops.layers.torch import Rearrange
 from transformers import GPT2Model
 
-from src.SimpleViT import SimpleViT
-
 
 def pair(t):
     return t if isinstance(t, tuple) else (t, t)
