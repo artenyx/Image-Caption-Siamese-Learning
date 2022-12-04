@@ -12,9 +12,9 @@ mscoco_loader = data_loaders.get_mscoco_loader(config)
 for i, (img, cap) in enumerate(mscoco_loader):
     cap = tokenizer(cap, return_tensors="pt", max_length=50, padding="max_length").to(config['device'])
     img = img.to(config['device'])
-    output = model(img.to(config['device']), cap)
+    img_emb, cap_emb = model(img.to(config['device']), cap)
 
-    loss = simclr_loss_func(img, cap, lam=config['simclr_lam'])
+    loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
 
     loss.backwards()
     optimizer.step()
