@@ -1,5 +1,5 @@
-from src import loaders as data_loaders, config as get_config, models as models
-from src.train import run_epoch
+from src.train import train_imgcap_network
 
 
-
+if __name__ == "__main__":
+    train_imgcap_network()
