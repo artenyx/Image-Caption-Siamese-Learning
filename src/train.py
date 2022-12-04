@@ -1,3 +1,5 @@
+import time
+
 from src.simclr import simclr_loss_func
 from src.config import get_exp_config
 from src.models import ImgCapModel
@@ -5,6 +7,7 @@ from src.loaders import get_mscoco_loader
 
 
 def run_epoch(model, config, batches_to_run=10000):
+    t0 = time.time()
     tokenizer = config['tokenizer']
     loader = config['loaders'][0]
     optimizer = config['optimizer']
@@ -26,7 +29,8 @@ def run_epoch(model, config, batches_to_run=10000):
         if i == batches_to_run - 1:
             break
     running_loss /= len(loader)
-    return running_loss
+    t1 = time.time() - t0
+    return t1, running_loss
 
 
 def train_imgcap_network(model=None, config=None):
@@ -37,9 +41,9 @@ def train_imgcap_network(model=None, config=None):
 
     config['loaders'] = [get_mscoco_loader(config)]
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
-    loss_list = []
+    data_list = []
     for i in range(config['epochs']):
-        loss_list.append(run_epoch(model, config, 1))
+        data_list.append(run_epoch(model, config, 1))
 
-    print(loss_list)
+    print(data_list)
     return
