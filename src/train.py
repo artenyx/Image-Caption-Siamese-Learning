@@ -23,12 +23,12 @@ def run_epoch(model, config, batches_to_run=10000):
         loss.backward()
         optimizer.step()
 
-        print(loss.item())
         running_loss += loss.item()
 
         if i == batches_to_run - 1:
             break
     running_loss /= len(loader)
+    print(len(loader))
     t1 = time.time() - t0
     return t1, running_loss
 
