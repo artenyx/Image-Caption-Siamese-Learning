@@ -16,7 +16,7 @@ for i, (img, cap) in enumerate(mscoco_loader):
 
     loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
 
-    loss.backwards()
+    loss.backward()
     optimizer.step()
 
     print(loss.item())
