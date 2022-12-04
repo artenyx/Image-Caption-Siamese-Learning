@@ -43,7 +43,7 @@ def train_imgcap_network(model=None, config=None):
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):
-        data_list.append(run_epoch(model, config, 1))
+        data_list.append(run_epoch(model, config, 10))
 
     print(data_list)
     return
