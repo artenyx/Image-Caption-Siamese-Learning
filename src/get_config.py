@@ -12,5 +12,6 @@ def get_exp_config():
               'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
               'num_workers': 6,
               "optimizer_type": torch.optim.Adam,
-              "optimizer": None}
+              "optimizer": None,
+              "lr": 0.001}
     return config
