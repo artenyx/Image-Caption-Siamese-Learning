@@ -28,7 +28,6 @@ def run_epoch(model, config, batches_to_run=10000):
         if i == batches_to_run - 1:
             break
     running_loss /= len(loader)
-    print(len(loader))
     t1 = time.time() - t0
     return t1, running_loss
 
@@ -43,7 +42,7 @@ def train_imgcap_network(model=None, config=None):
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):
-        data_list.append(run_epoch(model, config, 10))
+        data_list.append(run_epoch(model, config, 100))
 
     print(data_list)
     return
