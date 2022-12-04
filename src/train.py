@@ -30,12 +30,10 @@ def run_epoch(model, config, batches_to_run=10000):
 
 
 def train_imgcap_network(model=None, config=None):
-    if model is None:
-        model = ImgCapModel(config=config).to(config['device'])
-    print(config)
     if config is None:
         config = get_exp_config()
-        print("CONFIG DEFINED")
+    if model is None:
+        model = ImgCapModel(config=config).to(config['device'])
 
     config['loaders'] = get_mscoco_loader(config)
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
