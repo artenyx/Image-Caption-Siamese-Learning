@@ -14,7 +14,7 @@ def get_exp_config():
               'epochs': 1,
               'optimizer_type': torch.optim.Adam,
               'lr': 0.001,
-              'batch_size': 128,
+              'batch_size': 256,
               'simclr_lam': 0.5,
 
               'optimizer': None,
