@@ -1,6 +1,7 @@
 import torch.nn as nn
 
-from src import data_loaders as data_loaders, get_config as get_config, models as models
+from src import loaders as data_loaders, config as get_config, models as models
+from src.simclr import simclr_loss_func
 
 config = get_config.get_exp_config()
 model = models.ImgCapModel(config=config).to(config['device'])
@@ -13,7 +14,8 @@ for i, (img, cap) in enumerate(mscoco_loader):
     img = img.to(config['device'])
     output = model(img.to(config['device']), cap)
 
-    loss = nn.CosineSimilarity(img, cap)
+    loss = simclr_loss_func(img, cap, lam=config['simclr_lam'])
+
     loss.backwards()
     optimizer.step()
 

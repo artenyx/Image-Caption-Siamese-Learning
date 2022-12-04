@@ -11,7 +11,8 @@ def get_exp_config():
               'annPath': "/home/geraldkwhite/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_val2017.json",
               'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
               'num_workers': 6,
-              "optimizer_type": torch.optim.Adam,
-              "optimizer": None,
-              "lr": 0.001}
+              'optimizer_type': torch.optim.Adam,
+              'optimizer': None,
+              'lr': 0.001,
+              'simclr_lam': 0.5}
     return config
