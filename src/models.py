@@ -147,5 +147,4 @@ class ImgCapModel(nn.Module):
         cap = self.flatten(cap)
         cap = self.lm_linear(cap)
 
-        print("Img Out Shape:", img.shape, "Cap Out Shape:", cap.shape)
         return img, cap
