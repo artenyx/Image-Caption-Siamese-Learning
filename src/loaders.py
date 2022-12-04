@@ -92,5 +92,5 @@ def get_mscoco_loader(config):
     img, captions = mscoco[1]  # load 4th sample
 
     print("Image Size: ", img.size())
-    mscoco_loader = data.DataLoader(mscoco, batch_size=64, shuffle=False, num_workers=config['num_workers'])
+    mscoco_loader = data.DataLoader(mscoco, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
     return mscoco_loader

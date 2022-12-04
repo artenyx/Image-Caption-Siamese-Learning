@@ -10,9 +10,10 @@ def get_exp_config():
               'imgPath': "/home/geraldkwhite/Image-Caption-Siamese-Learning/mscoco_data/val2017",
               'annPath': "/home/geraldkwhite/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_val2017.json",
               'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
-              'num_workers': 6,
+              'num_workers': 12,
               'optimizer_type': torch.optim.Adam,
               'optimizer': None,
               'lr': 0.001,
+              'batch_size': 128,
               'simclr_lam': 0.5}
     return config
