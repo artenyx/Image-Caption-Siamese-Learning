@@ -34,7 +34,7 @@ def train_imgcap_network(model=None, config=None):
         model = ImgCapModel(config=config).to(config['device'])
     if config is None:
         config = get_exp_config()
-        print("config defined")
+        print("CONFIG DEFINED")
 
     config['loaders'] = get_mscoco_loader(config)
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
