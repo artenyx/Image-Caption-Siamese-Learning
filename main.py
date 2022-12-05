@@ -1,7 +1,5 @@
 import logging
 
-import torch
-
 from src.experiments import run_img_cap_learning
 
 
