@@ -1,5 +1,7 @@
 import logging
 
+import torch
+
 from src.train import train_imgcap_network
 from src.config import get_exp_config
 from src.loaders import get_cifar10_loader
@@ -28,8 +30,9 @@ def main():
     print(prompts)
     cifar10_loader = get_cifar10_loader(config=config)
     for i, (img, label) in enumerate(cifar10_loader):
-        print(label.item())
-        print(prompts[label.item()])
+        imgs = torch.stack([img]*10)
+        print(img.shape)
+        break
 
 
 #train_imgcap_network()
