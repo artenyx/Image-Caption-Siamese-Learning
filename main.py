@@ -10,6 +10,8 @@ def main():
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
     logging.info("Starting experiment.")
 
+    config = get_exp_config()
+
 
     cifar_labels = {0: "airplane",
                     1: "automobile",
@@ -24,6 +26,7 @@ def main():
 
     prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
     print(prompts)
+    get_cifar10_loader(config=config)
 
 
 #train_imgcap_network()
