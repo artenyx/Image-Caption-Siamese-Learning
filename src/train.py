@@ -61,7 +61,7 @@ def tokenize_text(cap, tokenizer):
 def run_epoch_image_caption(model, config, batches_to_run=10000):
     t0 = time.perf_counter()
     tokenizer = config['tokenizer']
-    loader = config['loaders'][0]
+    loader = config['loaders_train'][0]
     optimizer = config['optimizer']
 
     running_loss = 0
@@ -104,10 +104,9 @@ def eval_imgcap_network(model=None, config=None):
         config = get_exp_config()
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
-    model.eval()
-    config = get_exp_config()
-    tokenizer = config['tokenizer']
 
+    model.eval()
+    tokenizer = config['tokenizer']
     cifar_labels = {0: "airplane",
                     1: "automobile",
                     2: "bird",
