@@ -23,7 +23,7 @@ def run_img_cap_learning(config=None, model=None):
         exp_path = f"Experiment_Files/{date_time}"
         if not os.path.exists(exp_path):
             os.makedirs(exp_path)
-        data = train_data + (eval_data, "NA")
+        data = train_data + [(eval_data, "NA")]
         data = pd.DataFrame(data)
         data.to_csv(f"{exp_path}/data")
 
