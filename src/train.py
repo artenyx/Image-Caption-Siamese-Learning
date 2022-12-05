@@ -59,7 +59,7 @@ def tokenize_text(cap, tokenizer):
 
 
 def run_epoch_image_caption(model, config, batches_to_run=10000):
-    t0 = time.time()
+    t0 = time.perf_counter()
     tokenizer = config['tokenizer']
     loader = config['loaders'][0]
     optimizer = config['optimizer']
@@ -80,8 +80,8 @@ def run_epoch_image_caption(model, config, batches_to_run=10000):
         if i == batches_to_run - 1:
             break
     running_loss /= len(loader)
-    t1 = time.time() - t0
-    return t1, running_loss
+    t1 = time.perf_counter()
+    return t1 - t0, running_loss
 
 
 def train_imgcap_network(model=None, config=None):
@@ -94,10 +94,9 @@ def train_imgcap_network(model=None, config=None):
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):
-        data_list.append(run_epoch_image_caption(model, config, 100))
+        data_list.append(run_epoch_image_caption(model, config))
 
-    print(data_list)
-    return
+    return data_list
 
 
 def eval_imgcap_network(model=None, config=None):
@@ -105,7 +104,7 @@ def eval_imgcap_network(model=None, config=None):
         config = get_exp_config()
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
-
+    model.eval()
     config = get_exp_config()
     tokenizer = config['tokenizer']
 
@@ -122,6 +121,7 @@ def eval_imgcap_network(model=None, config=None):
 
     prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
     cifar10_loader = get_cifar10_loader(config=config)
+    correct = 0
     for i, (img, label) in enumerate(cifar10_loader):
         label = label.to(config['device'])
         img = torch.cat([img] * 10, dim=0).to(config['device'])  # creating batch tensor of input image
@@ -131,8 +131,8 @@ def eval_imgcap_network(model=None, config=None):
         cos = nn.CosineSimilarity()
         sim = cos(img_emb, cap_emb)
 
-        if torch.argmax(sim, dim=0) == label:
-            print("correct")
-        else:
-            print("incorrect")
+        correct += 1 if torch.argmax(sim, dim=0) == label else 0
+
+    correct /= len(cifar10_loader)
+    return correct
 

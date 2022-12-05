@@ -98,12 +98,11 @@ def get_mscoco_loader(config=None):
     return mscoco_loader
 
 
-def get_cifar10_loader(config=None, dset_size=100):
+def get_cifar10_loader(config=None):
     if config is None:
         config = get_exp_config()
     cifar10_test = datasets.CIFAR10(root="data", train=False, download=True, transform=config['transforms_cifar'])
-    cifar10_test = torch.utils.data.Subset(cifar10_test, range(dset_size))
-    #cifar10_test = [cifar10_test] * 10
+    cifar10_test = torch.utils.data.Subset(cifar10_test, range(config['eval_dset_size']))
     cifar10_test_loader = torch.utils.data.DataLoader(cifar10_test, batch_size=1, shuffle=True, num_workers=config['num_workers'])
     return cifar10_test_loader
 
