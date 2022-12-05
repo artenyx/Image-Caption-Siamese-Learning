@@ -28,8 +28,8 @@ def main():
     print(prompts)
     cifar10_loader = get_cifar10_loader(config=config)
     for i, (img, label) in enumerate(cifar10_loader):
-        print(label)
-        print(prompts[label])
+        print(label.item())
+        print(prompts[label.item()])
 
 
 #train_imgcap_network()
