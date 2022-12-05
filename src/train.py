@@ -1,10 +1,11 @@
 import time
 
 import torch
+import torch.nn as nn
 
 from src.config import get_exp_config
 from src.models import ImgCapModel
-from src.loaders import get_mscoco_loader
+from src.loaders import get_mscoco_loader, get_cifar10_loader
 
 
 def standardize(tensor):
@@ -52,6 +53,11 @@ def simclr_loss_func(embedding1, embedding2, lam=0.5):
     return loss
 
 
+def tokenize_text(cap, tokenizer):
+    cap = tokenizer(cap, return_tensors="pt", max_length=50, padding="max_length")
+    return cap
+
+
 def run_epoch_image_caption(model, config, batches_to_run=10000):
     t0 = time.time()
     tokenizer = config['tokenizer']
@@ -60,7 +66,7 @@ def run_epoch_image_caption(model, config, batches_to_run=10000):
 
     running_loss = 0
     for i, (img, cap) in enumerate(loader):
-        cap = tokenizer(cap, return_tensors="pt", max_length=50, padding="max_length").to(config['device'])
+        cap = tokenize_text(cap, tokenizer).to(config['device'])
         img = img.to(config['device'])
         img_emb, cap_emb = model(img.to(config['device']), cap)
 
@@ -100,6 +106,9 @@ def eval_imgcap_network(model=None, config=None):
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
 
+    config = get_exp_config()
+    tokenizer = config['tokenizer']
+
     cifar_labels = {0: "airplane",
                     1: "automobile",
                     2: "bird",
@@ -112,7 +121,15 @@ def eval_imgcap_network(model=None, config=None):
                     9: "truck"}
 
     prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
-    print(prompts)
+    cifar10_loader = get_cifar10_loader(config=config)
+    for i, (img, label) in enumerate(cifar10_loader):
+        img = torch.cat([img] * 10, dim=0).to(config['device'])  # creating batch tensor of input image
+        cap = tokenize_text([v for k, v in prompts.items()], tokenizer).to(config['device'])
+        img_emb, cap_emb = model(img, cap)
+
+        sim = nn.CosineSimilarity(img_emb, cap_emb)
+        print(sim.shape)
+        break
 
 
 
