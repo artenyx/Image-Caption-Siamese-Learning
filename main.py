@@ -26,7 +26,10 @@ def main():
 
     prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
     print(prompts)
-    get_cifar10_loader(config=config)
+    cifar10_loader = get_cifar10_loader(config=config)
+    for i, (img, label) in enumerate(cifar10_loader):
+        print(label)
+        print(prompts[label])
 
 
 #train_imgcap_network()
