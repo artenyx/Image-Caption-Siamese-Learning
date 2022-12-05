@@ -10,7 +10,7 @@ def main():
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
     logging.info("Starting experiment.")
     get_cifar10_loader()
-    train_imgcap_network()
+   #train_imgcap_network()
 
 
 if __name__ == "__main__":
