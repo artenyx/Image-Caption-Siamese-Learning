@@ -123,6 +123,7 @@ def eval_imgcap_network(model=None, config=None):
     prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
     cifar10_loader = get_cifar10_loader(config=config)
     for i, (img, label) in enumerate(cifar10_loader):
+        label = label.to(config['device'])
         img = torch.cat([img] * 10, dim=0).to(config['device'])  # creating batch tensor of input image
         cap = tokenize_text([v for k, v in prompts.items()], tokenizer).to(config['device'])
         img_emb, cap_emb = model(img, cap)
