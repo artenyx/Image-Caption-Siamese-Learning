@@ -127,7 +127,9 @@ def eval_imgcap_network(model=None, config=None):
         cap = tokenize_text([v for k, v in prompts.items()], tokenizer).to(config['device'])
         img_emb, cap_emb = model(img, cap)
 
-        sim = nn.CosineSimilarity(img_emb, cap_emb)
+        cos = nn.CosineSimilarity()
+        sim = cos(img_emb, cap_emb)
+
         print(sim.shape)
         break
 
