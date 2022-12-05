@@ -30,7 +30,8 @@ def main():
     print(prompts)
     cifar10_loader = get_cifar10_loader(config=config)
     for i, (img, label) in enumerate(cifar10_loader):
-        imgs = torch.stack([img]*10, dim=1)
+
+        imgs = torch.cat([img]*10, dim=1)
         print(imgs.shape)
         break
 
