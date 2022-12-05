@@ -31,7 +31,7 @@ def main():
     cifar10_loader = get_cifar10_loader(config=config)
     for i, (img, label) in enumerate(cifar10_loader):
         imgs = torch.stack([img]*10)
-        print(img.shape)
+        print(imgs.shape)
         break
 
 
