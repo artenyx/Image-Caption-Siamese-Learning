@@ -131,6 +131,9 @@ def eval_imgcap_network(model=None, config=None):
         sim = cos(img_emb, cap_emb)
 
         print(sim.shape)
+        print(type(sim))
+        print(torch.argmax(sim, dim=0))
+        print(label)
         break
 
 
