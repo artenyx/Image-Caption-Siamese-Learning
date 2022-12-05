@@ -93,6 +93,7 @@ def get_mscoco_loaders(config=None):
                               annFile=config['annPath_val'],
                               transform=config['transforms_mscoco'])
 
+    mscoco_train = torch.utils.data.Subset(mscoco_train, range(config['train_dset_size']))
     mscoco_loader_tr = torch.utils.data.DataLoader(mscoco_train, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
     mscoco_loader_val = torch.utils.data.DataLoader(mscoco_val, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
 
