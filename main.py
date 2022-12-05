@@ -4,12 +4,10 @@ from src.experiments import run_img_cap_learning
 
 
 def main():
-    log_fmt = "[%(levelname)s] %(asctime)s - %(message)s"
-    logging.basicConfig(format=log_fmt, level=logging.DEBUG)
-    logging.info("Starting experiment.")
-    run_img_cap_learning()
-    logging.info("Experiment complete.")
-
+    lr_list = [10**i for i in range(-5, 0)]
+    print(f"Testing learning rates: {lr_list}")
+    for lr in lr_list:
+        run_img_cap_learning(add_string=lr)
 
 if __name__ == "__main__":
     main()

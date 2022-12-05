@@ -16,7 +16,7 @@ def get_exp_config():
               'num_workers': 12,
               'epochs': 20,
               'optimizer_type': torch.optim.Adam,
-              'lr': 0.001,
+              'lr': 0.0001,
               'batch_size': 256,
               'simclr_lam': 0.5,
               'eval_dset_size': 1000,
