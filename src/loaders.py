@@ -103,6 +103,34 @@ def get_cifar10_loader(config=None, dset_size=100):
         config = get_exp_config()
     cifar10_test = datasets.CIFAR10(root="data", train=False, download=True, transform=config['transforms_cifar'])
     cifar10_test = torch.utils.data.Subset(cifar10_test, range(dset_size))
-    cifar10_test_loader = torch.utils.data.DataLoader(cifar10_test, batch_size=1, shuffle=True, num_workers=config['num_workers'])
+    cifar10_test = [cifar10_test] * 10
+    cifar10_test_loader = torch.utils.data.DataLoader(list(zip(*cifar10_test)), batch_size=10, shuffle=True, num_workers=config['num_workers'])
     return cifar10_test_loader
 
+def get_cifar100_usl(config):
+    transforms = T.Compose([config['transforms_dict'][key] for key in config['transforms_active']])
+    print(transforms)
+    batch_size = config['batch_size']
+
+    if config['usl_type'] == 'ae_single' and not config['denoising']:
+        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor())]
+        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor())]
+    elif config['usl_type'] == 'ae_single' and config['denoising']:
+        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor()),
+                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms)]
+        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor()),
+                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms)]
+    else:
+        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor()),
+                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms),
+                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms)]
+        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor()),
+                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms),
+                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms)]
+    if batch_size < 64:
+        nworkers = 6
+    else:
+        nworkers = 12
+    train_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_train)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
+    test_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_test)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
+    return train_loader, test_loader
