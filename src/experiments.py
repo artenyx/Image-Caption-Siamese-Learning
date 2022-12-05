@@ -17,6 +17,7 @@ def run_img_cap_learning(config=None, model=None):
     train_data = train_imgcap_network(config=config, model=model)
     with torch.no_grad():
         eval_data = eval_imgcap_network(config=config, model=model)
+    print(f"Model trained to {config['epochs']} epochs and achieved evaluation rate of {eval_data} on CIFAR10.")
 
     if config['save_data']:
         date_time = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
