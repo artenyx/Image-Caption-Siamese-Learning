@@ -9,7 +9,7 @@ import os.path
 from src.config import get_exp_config
 
 
-class CocoCaptions1(torch.utils.data.Dataset):
+class CocoCaptions(torch.utils.data.Dataset):
     """`MS Coco Captions <http://mscoco.org/dataset/#captions-challenge2015>`_ Dataset.
 
     Args:
@@ -86,16 +86,19 @@ class CocoCaptions1(torch.utils.data.Dataset):
 def get_mscoco_loader(config=None):
     if config is None:
         config = get_exp_config()
-    mscoco = CocoCaptions1(root=config['imgPath'],
-                           annFile=config['annPath'],
-                           transform=config['transforms_mscoco'])
-    mscoco_loader = torch.utils.data.DataLoader(mscoco, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
+    mscoco_train = CocoCaptions(root=config['imgPath_train'],
+                                annFile=config['annPath_train'],
+                                transform=config['transforms_mscoco'])
+    mscoco_val = CocoCaptions(root=config['imgPath_val'],
+                              annFile=config['annPath_val'],
+                              transform=config['transforms_mscoco'])
 
-    print(f"Number of samples: {len(mscoco)}")
-    img, captions = mscoco[0]
-    print(f"Image Size: {img.size()}")
+    mscoco_loader_tr = torch.utils.data.DataLoader(mscoco_train, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
+    mscoco_loader_val = torch.utils.data.DataLoader(mscoco_val, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
 
-    return mscoco_loader
+    print(f"Number of samples in train/val: {len(mscoco_train)}/{len(mscoco_val)}")
+
+    return mscoco_loader_tr, mscoco_loader_val
 
 
 def get_cifar10_loader(config=None):

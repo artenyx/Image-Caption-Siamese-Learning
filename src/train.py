@@ -58,22 +58,27 @@ def tokenize_text(cap, tokenizer):
     return cap
 
 
-def run_epoch_image_caption(model, config, batches_to_run=10000):
+def run_epoch_image_caption(model, config, batches_to_run=10000, grad=True):
     t0 = time.perf_counter()
     tokenizer = config['tokenizer']
-    loader = config['loaders_train'][0]
+    loader = config['loaders_train'][0 if grad else 1]
     optimizer = config['optimizer']
 
     running_loss = 0
+    if grad:
+        model.eval()
     for i, (img, cap) in enumerate(loader):
         cap = tokenize_text(cap, tokenizer).to(config['device'])
         img = img.to(config['device'])
         img_emb, cap_emb = model(img.to(config['device']), cap)
 
-        loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
-
-        loss.backward()
-        optimizer.step()
+        if grad:
+            optimizer.zero_grad()
+            loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
+            loss.backward()
+            optimizer.step()
+        else:
+            loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
 
         running_loss += loss.item()
 
@@ -94,8 +99,10 @@ def train_imgcap_network(model=None, config=None):
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):
-        data_list.append(run_epoch_image_caption(model, config))
-
+        time_train, loss_train = run_epoch_image_caption(model, config, grad=True)
+        time_val, loss_val = run_epoch_image_caption(model, config, grad=False)
+        data_list.append((time_train, loss_train, time_val, loss_val))
+        print("Epoch {:02d}/{:02d}\nTime Train/Val: {:02f}/{:02f}\nLoss Train/Val: {:02f}/{:02f}".format(i+1, config['epochs'], time_train, time_val, loss_train, loss_val))
     return data_list
 
 
@@ -107,19 +114,10 @@ def eval_imgcap_network(model=None, config=None):
 
     model.eval()
     tokenizer = config['tokenizer']
-    cifar_labels = {0: "airplane",
-                    1: "automobile",
-                    2: "bird",
-                    3: "cat",
-                    4: "deer",
-                    5: "dog",
-                    6: "frog",
-                    7: "horse",
-                    8: "ship",
-                    9: "truck"}
-
+    cifar_labels = config['cifar_labels']
     prompts = {k: f"A photo of a {v}" for k, v in cifar_labels.items()}
     cifar10_loader = get_cifar10_loader(config=config)
+
     correct = 0
     for i, (img, label) in enumerate(cifar10_loader):
         label = label.to(config['device'])
