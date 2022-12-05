@@ -2,15 +2,17 @@ import logging
 
 import torch
 
-from src.train import train_imgcap_network, tokenize_text
+from src.train import train_imgcap_network, eval_imgcap_network
 from src.config import get_exp_config
-from src.loaders import get_cifar10_loader
 
 
 def main():
     log_fmt = "[%(levelname)s] %(asctime)s - %(message)s"
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
     logging.info("Starting experiment.")
+    eval_imgcap_network()
+    logging.info("Experiment complete.")
+
 
 
 
