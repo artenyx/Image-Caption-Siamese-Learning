@@ -1,6 +1,6 @@
 import os
 import torch
-import datetime
+from datetime import datetime
 import pandas as pd
 
 from src.config import get_exp_config
