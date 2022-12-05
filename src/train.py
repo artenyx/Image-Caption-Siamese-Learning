@@ -54,7 +54,7 @@ def simclr_loss_func(embedding1, embedding2, lam=0.5):
 
 
 def tokenize_text(cap, tokenizer):
-    cap = tokenizer(cap, return_tensors="pt", max_length=50, padding="max_length")
+    cap = tokenizer(cap, return_tensors="pt", max_length=75, padding="max_length")
     return cap
 
 
