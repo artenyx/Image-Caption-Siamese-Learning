@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from src.config import get_exp_config
 from src.models import ImgCapModel
-from src.loaders import get_mscoco_loader, get_cifar10_loader
+from src.loaders import get_mscoco_loaders, get_cifar10_loader
 
 
 def standardize(tensor):
@@ -95,7 +95,7 @@ def train_imgcap_network(model=None, config=None):
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
 
-    config['loaders_train'] = [get_mscoco_loader(config)]
+    config['loaders_train'] = get_mscoco_loaders(config)
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):

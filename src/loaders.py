@@ -83,7 +83,7 @@ class CocoCaptions(torch.utils.data.Dataset):
         return len(self.ids)
 
 
-def get_mscoco_loader(config=None):
+def get_mscoco_loaders(config=None):
     if config is None:
         config = get_exp_config()
     mscoco_train = CocoCaptions(root=config['imgPath_train'],
