@@ -47,13 +47,14 @@ class CocoCaptions(torch.utils.data.Dataset):
             u'A mountain view with a plume of smoke in the background']
 
     """
-    def __init__(self, root, annFile, transform=None, target_transform=None):
+    def __init__(self, root, annFile, dset_size=None, transform=None, target_transform=None):
         from pycocotools.coco import COCO
         self.root = os.path.expanduser(root)
         self.coco = COCO(annFile)
         self.ids = list(self.coco.imgs.keys())
         self.transform = transform
         self.target_transform = target_transform
+        self.dset_size = dset_size
 
     def __getitem__(self, index):
         """
@@ -80,7 +81,10 @@ class CocoCaptions(torch.utils.data.Dataset):
         return img, target
 
     def __len__(self):
-        return len(self.ids)
+        if self.dset_size is not None:
+            return self.dset_size
+        else:
+            return len(self.ids)
 
 
 def get_mscoco_loaders(config=None):
@@ -88,7 +92,8 @@ def get_mscoco_loaders(config=None):
         config = get_exp_config()
     mscoco_train = CocoCaptions(root=config['imgPath_train'],
                                 annFile=config['annPath_train'],
-                                transform=config['transforms_mscoco'])
+                                transform=config['transforms_mscoco'],
+                                dset_size=config['train_dset_size'])
     mscoco_val = CocoCaptions(root=config['imgPath_val'],
                               annFile=config['annPath_val'],
                               transform=config['transforms_mscoco'])
