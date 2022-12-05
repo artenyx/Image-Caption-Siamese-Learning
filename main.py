@@ -9,8 +9,24 @@ def main():
     log_fmt = "[%(levelname)s] %(asctime)s - %(message)s"
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
     logging.info("Starting experiment.")
-    get_cifar10_loader()
-   #train_imgcap_network()
+
+
+    cifar_labels = {0: "airplane",
+                    1: "automobile",
+                    2: "bird",
+                    3: "cat",
+                    4: "deer",
+                    5: "dog",
+                    6: "frog",
+                    7: "horse",
+                    8: "ship",
+                    9: "truck"}
+
+    prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
+    print(prompts)
+
+
+#train_imgcap_network()
 
 
 if __name__ == "__main__":

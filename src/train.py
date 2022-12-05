@@ -100,6 +100,20 @@ def eval_imgcap_network(model=None, config=None):
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
 
+    cifar_labels = {0: "airplane",
+                    1: "automobile",
+                    2: "bird",
+                    3: "cat",
+                    4: "deer",
+                    5: "dog",
+                    6: "frog",
+                    7: "horse",
+                    8: "ship",
+                    9: "truck"}
+
+    prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
+    print(prompts)
+
 
 
 
