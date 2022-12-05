@@ -107,7 +107,8 @@ def get_cifar10_loader(config=None, dset_size=100):
     cifar10_test_loader = torch.utils.data.DataLoader(list(zip(*cifar10_test)), batch_size=10, shuffle=True, num_workers=config['num_workers'])
     return cifar10_test_loader
 
-def get_cifar100_usl(config):
+
+'''def get_cifar100_usl(config):
     transforms = T.Compose([config['transforms_dict'][key] for key in config['transforms_active']])
     print(transforms)
     batch_size = config['batch_size']
@@ -134,3 +135,4 @@ def get_cifar100_usl(config):
     train_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_train)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
     test_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_test)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
     return train_loader, test_loader
+'''
