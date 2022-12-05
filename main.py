@@ -7,6 +7,7 @@ from src.config import get_exp_config
 def main():
     log_fmt = "[%(levelname)s] %(asctime)s - %(message)s"
     logging.basicConfig(format=log_fmt)
+    logging.info("Starting experiment.")
     lr_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1]
     for lr in lr_list:
         print("lr:", lr)
