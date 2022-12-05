@@ -84,7 +84,7 @@ def train_imgcap_network(model=None, config=None):
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
 
-    config['loaders'] = [get_mscoco_loader(config)]
+    config['loaders_train'] = [get_mscoco_loader(config)]
     config['optimizer'] = config['optimizer_type'](model.parameters(), lr=config['lr'])
     data_list = []
     for i in range(config['epochs']):
@@ -92,6 +92,15 @@ def train_imgcap_network(model=None, config=None):
 
     print(data_list)
     return
+
+
+def eval_imgcap_network(model=None, config=None):
+    if config is None:
+        config = get_exp_config()
+    if model is None:
+        model = ImgCapModel(config=config).to(config['device'])
+
+
 
 
 

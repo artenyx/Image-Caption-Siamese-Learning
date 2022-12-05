@@ -21,5 +21,6 @@ def get_exp_config():
               'simclr_lam': 0.5,
 
               'optimizer': None,
-              'loaders': None}
+              'loaders_train': None,
+              'loaders_eval': None}
     return config
