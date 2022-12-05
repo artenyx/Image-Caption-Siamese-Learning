@@ -1,12 +1,13 @@
-import torch.utils.data as data
-from torchvision.utils import save_image
+import torch
+import torch.utils.data
+from torchvision import datasets
 
 from PIL import Image
 import os
 import os.path
 
 
-class CocoCaptions1(data.Dataset):
+class CocoCaptions1(torch.utils.data.Dataset):
     """`MS Coco Captions <http://mscoco.org/dataset/#captions-challenge2015>`_ Dataset.
 
     Args:
@@ -72,10 +73,8 @@ class CocoCaptions1(data.Dataset):
         img = Image.open(os.path.join(self.root, path)).convert('RGB')
         if self.transform is not None:
             img = self.transform(img)
-
         if self.target_transform is not None:
             target = self.target_transform(target)
-
         return img, target
 
     def __len__(self):
@@ -83,14 +82,21 @@ class CocoCaptions1(data.Dataset):
 
 
 def get_mscoco_loader(config):
-
     mscoco = CocoCaptions1(root=config['imgPath'],
                            annFile=config['annPath'],
-                           transform=config['transforms'])
+                           transform=config['transforms_mscoco'])
+    mscoco_loader = torch.utils.data.DataLoader(mscoco, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
 
-    print('Number of samples: ', len(mscoco))
+    print(f"Number of samples: {len(mscoco)}")
     img, captions = mscoco[1]  # load 4th sample
+    print(f"Image Size: {img.size()}")
+    print(img)
 
-    print("Image Size: ", img.size())
-    mscoco_loader = data.DataLoader(mscoco, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
     return mscoco_loader
+
+
+def get_cifar10_loader(config):
+    cifar10_test = datasets.CIFAR10(root="data", train=False, download=True, transform=config['transforms_cifar'])
+    cifar10_test_loader = torch.utils.data.DataLoader(cifar10_test, batch_size=config['batch_size'], shuffle=True, num_workers=config['num_workers'])
+    return cifar10_test_loader
+
