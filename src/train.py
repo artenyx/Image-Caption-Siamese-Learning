@@ -118,7 +118,7 @@ def eval_imgcap_network(model=None, config=None):
                     8: "ship",
                     9: "truck"}
 
-    prompts = {k: f"This image is a {v}" for k, v in cifar_labels.items()}
+    prompts = {k: f"A photo of a {v}" for k, v in cifar_labels.items()}
     cifar10_loader = get_cifar10_loader(config=config)
     correct = 0
     for i, (img, label) in enumerate(cifar10_loader):

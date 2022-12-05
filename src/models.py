@@ -125,11 +125,13 @@ class SimpleViT(nn.Module):
 class ImgCapModel(nn.Module):
     def __init__(self, config):
         super(ImgCapModel, self).__init__()
+        self.latent_dim = config['latent_dim']
+
         self.vis_model = SimpleViT(
             image_size=32,
             patch_size=4,
             num_classes=1000,
-            dim=512,
+            dim=self.latent_dim,
             depth=6,
             heads=16,
             mlp_dim=2048)
@@ -138,7 +140,7 @@ class ImgCapModel(nn.Module):
         self.gpt2_mod = GPT2Model.from_pretrained("gpt2")
         self.gpt2_mod.resize_token_embeddings(len(tokenizer))
         self.flatten = nn.Flatten()
-        self.lm_linear = nn.LazyLinear(512)
+        self.lm_linear = nn.LazyLinear(self.latent_dim)
 
     def forward(self, img, cap):
         img = self.vis_model(img)

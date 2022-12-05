@@ -21,6 +21,7 @@ def get_exp_config():
               'simclr_lam': 0.5,
               'eval_dset_size': 1000,
               'save_data': True,
+              'latent_dim': 512,
 
               'optimizer': None,
               'loaders_train': None,
