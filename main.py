@@ -34,7 +34,7 @@ def main():
         imgs = torch.cat([img]*10, dim=0)
         print(imgs.shape)
         print(imgs[0,0,0,:10])
-        print(imgs[1,0,0,:10])
+        print(imgs[9,0,0,:10])
         break
 
 
