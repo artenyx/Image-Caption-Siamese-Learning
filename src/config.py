@@ -6,6 +6,7 @@ from transformers import GPT2TokenizerFast, GPT2Model
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+
 def get_exp_config():
     cifar_labels = {0: "airplane",
                     1: "automobile",

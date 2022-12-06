@@ -66,6 +66,8 @@ def run_epoch_image_caption(model, config, batches_to_run=10000, grad=True):
 
     running_loss = 0
     if grad:
+        model.train()
+    else:
         model.eval()
     for i, (img, cap) in enumerate(loader):
         cap = tokenize_text(cap, tokenizer).to(config['device'])
