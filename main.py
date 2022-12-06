@@ -2,14 +2,16 @@ import logging
 import torch
 
 from src.experiments import run_img_cap_learning
+from src.config import get_exp_config
 
 
 def main():
-    print(torch.cuda.memory_summary(device=None, abbreviated=False))
     lr_list = [10**i for i in range(-5, 0)]
     print(f"Testing learning rates: {lr_list}")
     for lr in lr_list:
-        run_img_cap_learning(add_string=str(lr))
+        config = get_exp_config()
+        config['lr'] = lr
+        run_img_cap_learning(config=config, add_string=str(lr))
 
 
 if __name__ == "__main__":
