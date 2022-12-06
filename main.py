@@ -7,7 +7,7 @@ from src.config import get_exp_config
 
 
 def main():
-    lr_list = [10**i for i in range(-5, 0)]
+    lr_list = [10**i for i in range(-6, -3)]
     print(f"Testing learning rates: {lr_list}")
     print(f"Starting at {time.time()}")
     for lr in lr_list:
