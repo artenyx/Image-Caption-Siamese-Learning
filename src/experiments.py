@@ -27,6 +27,7 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
         data = train_data + [(eval_data, "NA")]
         data = pd.DataFrame(data)
         data.to_csv(f"{exp_path}/data")
+        torch.save(model.state_dict(), f"{exp_path}/model.pt")
 
 
 
