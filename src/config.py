@@ -30,7 +30,7 @@ def get_exp_config():
               'num_workers': 12,
               'epochs': 10,
               'optimizer_type': torch.optim.Adam,
-              'lr': 0.0001,
+              'lr': 0.00001,
               'batch_size': 32,
               'simclr_lam': 0.5,
               'train_dset_size': 30000,
