@@ -103,7 +103,6 @@ def get_mscoco_loaders(config=None):
     mscoco_loader_val = torch.utils.data.DataLoader(mscoco_val, batch_size=config['batch_size'], shuffle=False, num_workers=config['num_workers'])
 
     print(f"Number of samples in train/val: {len(mscoco_train)}/{len(mscoco_val)}")
-
     return mscoco_loader_tr, mscoco_loader_val
 
 
