@@ -44,8 +44,8 @@ def get_exp_config():
               'loaders_eval': None}
     if True:
         config['imgPath_val'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/val2017"
-        config['annPath_val'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/captions_val2017.json"
+        config['annPath_val'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_val2017.json"
         config['imgPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/test2017"
-        config['annPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/captions_test2017.json"
+        config['annPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_test2017.json"
 
     return config
