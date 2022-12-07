@@ -28,7 +28,7 @@ def get_exp_config():
               'annPath_train': "/home/geraldkwhite/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_train2017.json",
               'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu"),
               'num_workers': 12,
-              'epochs': 10,
+              'epochs': 100,
               'optimizer_type': torch.optim.Adam,
               'lr': 0.0001,
               'batch_size': 16,
