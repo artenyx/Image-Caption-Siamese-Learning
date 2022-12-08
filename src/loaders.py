@@ -78,6 +78,7 @@ class CocoCaptions(torch.utils.data.Dataset):
         path = coco.loadImgs(img_id)[0]['file_name']
 
         img = Image.open(os.path.join(self.root, path)).convert('RGB')
+        img = T.ToTensor()(img)
         if self.transform is not None:
             img_aug = self.transform(img)
         else:
@@ -98,7 +99,7 @@ def get_mscoco_loaders(config=None):
         config = get_exp_config()
     if config['new_method']:
         s = 0.25
-        config['transforms_mscoco'] = T.Compose([T.ToTensor(), T.RandomCrop(24), T.Resize(32), T.RandomHorizontalFlip(p=0.8), T.ColorJitter(brightness=0.8 * s, contrast=0.8 * s, saturation=0.8 * s, hue=0.2 * s)])
+        config['transforms_mscoco'] = T.Compose([T.RandomCrop(24), T.Resize(32), T.RandomHorizontalFlip(p=0.8), T.ColorJitter(brightness=0.8 * s, contrast=0.8 * s, saturation=0.8 * s, hue=0.2 * s)])
     mscoco_train = CocoCaptions(root=config['imgPath_train'],
                                 annFile=config['annPath_train'],
                                 transform=config['transforms_mscoco'],

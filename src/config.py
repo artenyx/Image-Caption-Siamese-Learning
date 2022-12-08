@@ -19,7 +19,7 @@ def get_exp_config():
                     8: "ship",
                     9: "truck"}
 
-    config = {'transforms_mscoco': T.Compose([T.ToTensor(), T.Resize(32)]),
+    config = {'transforms_mscoco': T.Compose([T.Resize(32)]),
               'transforms_cifar': T.ToTensor(),
               'tokenizer': GPT2TokenizerFast.from_pretrained("gpt2", pad_token='[PAD]'),
               'imgPath_val': "/home/geraldkwhite/Image-Caption-Siamese-Learning/mscoco_data/val2017",
