@@ -133,6 +133,7 @@ def get_kmeans_from_embedding(config, model, loader, img_or_cap="img", cifar=Tru
         for data in loader:
             if cifar:
                 img, __ = data
+                cap = None
             else:
                 img, __, cap = data
             img = img.cuda()
@@ -143,7 +144,6 @@ def get_kmeans_from_embedding(config, model, loader, img_or_cap="img", cifar=Tru
             if len(embed.shape) != 1:
                 embed = nn.Flatten()(embed)
             embeddings.append(embed)
-            captions.append(cap)
     embeddings = torch.cat(embeddings).detach().cpu()
     kmeans = kmeans_embeddings(embeddings.numpy())
     kmeans_labels = pd.DataFrame(kmeans.labels_)
