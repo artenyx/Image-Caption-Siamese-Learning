@@ -125,12 +125,16 @@ def get_cifar10_loader(config=None):
     return cifar10_test_loader
 
 
-def get_kmeans_from_embedding(config, model, loader, img_or_cap="img"):
+def get_kmeans_from_embedding(config, model, loader, img_or_cap="img", cifar=True):
     model.eval()
     embeddings = []
     captions = []
     with torch.no_grad():
-        for img, img_aug, cap in loader:
+        for data in loader:
+            if cifar:
+                img, __ = data
+            else:
+                img, __, cap = data
             img = img.cuda()
             if img_or_cap == "img":
                 embed = model.encode_image(img)
