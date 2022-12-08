@@ -47,7 +47,7 @@ def get_exp_config():
     if True:
         config['imgPath_val'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/val2017"
         config['annPath_val'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_val2017.json"
-        config['imgPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/train2017"
-        config['annPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_train2017.json"
+        config['imgPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/train2014"
+        config['annPath_train'] = "/home/whiteg671/Image-Caption-Siamese-Learning/mscoco_data/annotations/captions_train2014.json"
 
     return config
