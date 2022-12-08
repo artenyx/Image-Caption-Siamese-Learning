@@ -78,7 +78,7 @@ class CocoCaptions(torch.utils.data.Dataset):
         path = coco.loadImgs(img_id)[0]['file_name']
 
         img = Image.open(os.path.join(self.root, path)).convert('RGB')
-        img = T.ToTensor()(img)
+        img = T.Compose([T.ToTensor(), T.Resize(32)])(img)
         if self.transform is not None:
             img_aug = self.transform(img)
         else:
