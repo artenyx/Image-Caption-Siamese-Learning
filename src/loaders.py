@@ -148,8 +148,8 @@ def get_kmeans_from_embedding(config, model, loader, img_or_cap="img", cifar=Tru
     kmeans = kmeans_embeddings(embeddings.numpy())
     kmeans_labels = pd.DataFrame(kmeans.labels_)
     kmeans_labels.to_csv(f"{config['exp_path']}/kmeans_labels.csv")
-    print(kmeans.intertia_)
-    print(type(kmeans.intertia_))
+    print(kmeans.inertia_)
+    print(type(kmeans.inertia_))
     kmeans_inertia = pd.DataFrame(kmeans.inertia_)
     kmeans_inertia.to_csv(f"{config['exp_path']}/kmeans_inertia.csv")
     return kmeans
