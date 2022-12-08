@@ -133,7 +133,7 @@ def get_kmeans_from_embedding(config, model, loader, img_or_cap="img"):
         for img, img_aug, cap in loader:
             img = img.cuda()
             if img_or_cap == "img":
-                embed = model.encode_img(img)
+                embed = model.encode_image(img)
             else:
                 embed = model.encode_text(cap)
             if len(embed.shape) != 1:
