@@ -37,7 +37,9 @@ def epoch_exp():
     for epoch in epoch_list:
         current_time = datetime.now().strftime("%H:%M:%S")
         print(f"Starting at {current_time}")
-        run_img_cap_learning(add_string=f"epoch_{epoch}")
+        config = get_exp_config()
+        config['epochs'] = epoch
+        run_img_cap_learning(config=config, add_string=f"epoch_{epoch}")
     print("Experiment Complete.")
 
 
