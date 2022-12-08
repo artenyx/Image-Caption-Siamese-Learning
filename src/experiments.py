@@ -32,6 +32,14 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
         torch.save(model.state_dict(), f"{exp_path}/model.pt")
 
 
+def epoch_exp():
+    epoch_list = [5, 10, 15, 20]
+    for epoch in epoch_list:
+        current_time = datetime.now().strftime("%H:%M:%S")
+        print(f"Starting at {current_time}")
+        run_img_cap_learning(add_string=f"epoch_{epoch}")
+    print("Experiment Complete.")
+
 
 
 
