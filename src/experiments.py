@@ -33,17 +33,34 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
 
 
 def epoch_exp():
+    current_time = datetime.now().strftime("%H:%M:%S")
+    print(f"Starting at {current_time}")
     #epoch_list = [5, 10, 15, 20]
     epoch_list = [10]
+    print(f"Testing epochs {epoch_list}")
     for epoch in epoch_list:
         current_time = datetime.now().strftime("%H:%M:%S")
-        print(f"Starting at {current_time}")
+        print(f"Starting epoch = {epoch} at {current_time}")
         config = get_exp_config()
         config['epochs'] = epoch
         config['new_method'] = False
         run_img_cap_learning(config=config, add_string=f"epoch_{epoch}")
     print("Experiment Complete.")
 
+
+def alpha_exp():
+    current_time = datetime.now().strftime("%H:%M:%S")
+    print(f"Starting at {current_time}")
+    alpha_list = [10**i for i in range(-5, 1)]
+    print(f"Testing alphas {alpha_list}")
+    for alpha in alpha_list:
+        current_time = datetime.now().strftime("%H:%M:%S")
+        print(f"Starting alpha = {alpha} at {current_time}")
+        config = get_exp_config()
+        config['alpha'] = alpha
+        config['new_method'] = True
+        run_img_cap_learning(config=config, add_string=f"alpha_{alpha}")
+    print("Experiment Complete.")
 
 
 
