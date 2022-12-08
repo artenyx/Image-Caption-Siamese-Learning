@@ -102,10 +102,10 @@ class SimpleViT(nn.Module):
 
         self.transformer = Transformer(dim, depth, heads, dim_head, mlp_dim)
 
-        self.to_latent = nn.Identity()
+        self.to_latent = nn.Softmax()
         self.linear_head = nn.Sequential(
             nn.LayerNorm(dim),
-            nn.Linear(dim, num_classes)
+            nn.Linear(dim, num_classes),
         )
 
     def forward(self, img):
@@ -119,7 +119,7 @@ class SimpleViT(nn.Module):
         x = x.mean(dim=1)
 
         x = self.to_latent(x)
-        return x #, self.linear_head(x)
+        return
 
 
 class ImgCapModel(nn.Module):
@@ -130,7 +130,7 @@ class ImgCapModel(nn.Module):
         self.vis_model = SimpleViT(
             image_size=32,
             patch_size=4,
-            num_classes=1000,
+            num_classes=1000, # not used
             dim=self.latent_dim,
             depth=6,
             heads=16,
@@ -151,6 +151,7 @@ class ImgCapModel(nn.Module):
         cap = cap.last_hidden_state
         cap = self.flatten(cap)
         cap = self.lm_linear(cap)
+        cap = nn.Softmax()(cap)
         return cap
 
     def forward(self, img, cap):
