@@ -74,7 +74,7 @@ def run_epoch_image_caption(model, config, batches_to_run=10000, grad=True):
         img = img.to(config['device'])
         img_emb, cap_emb = model(img.to(config['device']), cap)
         if config['new_method']:
-            img_aug.to(config['device'])
+            img_aug = img_aug.to(config['device'])
             img_aug_emb = model.encode_image(img_aug)
             optimizer.zero_grad()
             loss = torch.sum(simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam']) +
