@@ -38,7 +38,7 @@ def get_exp_config():
               'save_data': True,
               'latent_dim': 512,
               'cifar_labels': cifar_labels,
-              'new_method': False,
+              'new_method': True,
               'alpha': 0.001,
 
               'optimizer': None,
