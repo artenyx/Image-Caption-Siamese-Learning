@@ -54,6 +54,7 @@ class CocoCaptions(torch.utils.data.Dataset):
     def __init__(self, root, annFile, dset_size=None, transform=None, target_transform=None):
         from pycocotools.coco import COCO
         self.root = os.path.expanduser(root)
+        
         self.coco = COCO(annFile)
         self.ids = list(self.coco.imgs.keys())
         self.transform = transform
