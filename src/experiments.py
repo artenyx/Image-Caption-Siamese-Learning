@@ -39,6 +39,7 @@ def epoch_exp():
         print(f"Starting at {current_time}")
         config = get_exp_config()
         config['epochs'] = epoch
+        config['new_method'] = False
         run_img_cap_learning(config=config, add_string=f"epoch_{epoch}")
     print("Experiment Complete.")
 
