@@ -7,6 +7,9 @@ from src.config import get_exp_config
 
 
 def main():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Device: {device}")
+    epoch_exp()
     alpha_exp()
 
 

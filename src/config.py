@@ -33,7 +33,7 @@ def get_exp_config():
               'lr': 0.00001,
               'batch_size': 16,
               'simclr_lam': 0.5,
-              'train_dset_size': 118287,
+              'train_dset_size': 30000,
               'eval_dset_size': 1000,
               'save_data': True,
               'latent_dim': 512,
