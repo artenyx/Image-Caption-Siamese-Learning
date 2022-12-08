@@ -1,7 +1,11 @@
 import torch
+import torch.nn as nn
 import torch.utils.data
-from torchvision import datasets
+from torchvision import datasets, transforms as T
 
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
 from PIL import Image
 import os
 import os.path
@@ -75,10 +79,12 @@ class CocoCaptions(torch.utils.data.Dataset):
 
         img = Image.open(os.path.join(self.root, path)).convert('RGB')
         if self.transform is not None:
-            img = self.transform(img)
+            img_aug = self.transform(img)
+        else:
+            img_aug = None
         if self.target_transform is not None:
             target = self.target_transform(target)
-        return img, target
+        return img, img_aug, target
 
     def __len__(self):
         if self.dset_size is not None:
@@ -90,6 +96,9 @@ class CocoCaptions(torch.utils.data.Dataset):
 def get_mscoco_loaders(config=None):
     if config is None:
         config = get_exp_config()
+    if config['new_method']:
+        s = 0.25
+        config['transforms_mscoco'] = T.Compose([T.RandomCrop(24), T.Resize(32), T.RandomHorizontalFlip(p=0.8), T.ColorJitter(brightness=0.8 * s, contrast=0.8 * s, saturation=0.8 * s, hue=0.2 * s)])
     mscoco_train = CocoCaptions(root=config['imgPath_train'],
                                 annFile=config['annPath_train'],
                                 transform=config['transforms_mscoco'],
@@ -115,31 +124,31 @@ def get_cifar10_loader(config=None):
     return cifar10_test_loader
 
 
-'''def get_cifar100_usl(config):
-    transforms = T.Compose([config['transforms_dict'][key] for key in config['transforms_active']])
-    print(transforms)
-    batch_size = config['batch_size']
+def get_kmeans_from_embedding(config, model, loader, img_or_cap="img"):
+    model.eval()
+    embeddings = []
+    captions = []
+    with torch.no_grad():
+        for img, img_aug, cap in loader:
+            img = img.cuda()
+            if img_or_cap == "img":
+                embed = model.encode_img(img)
+            else:
+                embed = model.encode_text(cap)
+            if len(embed.shape) != 1:
+                embed = nn.Flatten()(embed)
+            embeddings.append(embed)
+            captions.append(cap)
+    embeddings = torch.cat(embeddings).detach().cpu()
+    kmeans = kmeans_embeddings(embeddings.numpy())
+    kmeans_labels = pd.DataFrame(kmeans.labels_)
+    kmeans_labels.to_csv(f"{config['exp_path']}/kmeans_labels.csv")
+    kmeans_inertia = pd.DataFrame(kmeans.inertia_)
+    kmeans_inertia.to_csv(f"{config['exp_path']}/kmeans_inertia.csv")
+    return kmeans
 
-    if config['usl_type'] == 'ae_single' and not config['denoising']:
-        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor())]
-        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor())]
-    elif config['usl_type'] == 'ae_single' and config['denoising']:
-        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor()),
-                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms)]
-        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor()),
-                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms)]
-    else:
-        dataset_list_train = [datasets.CIFAR100(root="data", train=True, download=True, transform=T.ToTensor()),
-                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms),
-                              datasets.CIFAR100(root="data", train=True, download=True, transform=transforms)]
-        dataset_list_test = [datasets.CIFAR100(root="data", train=False, download=True, transform=T.ToTensor()),
-                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms),
-                             datasets.CIFAR100(root="data", train=False, download=True, transform=transforms)]
-    if batch_size < 64:
-        nworkers = 6
-    else:
-        nworkers = 12
-    train_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_train)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
-    test_loader = torch.utils.data.DataLoader(list(zip(*dataset_list_test)), batch_size=batch_size, shuffle=True, num_workers=nworkers)
-    return train_loader, test_loader
-'''
+
+def kmeans_embeddings(embeddings: np.array):
+    embeddings = pd.DataFrame(embeddings)
+    kmeans_model = KMeans(n_clusters=10, random_state=32932).fit(embeddings)
+    return kmeans_model

@@ -6,6 +6,7 @@ import pandas as pd
 from src.config import get_exp_config
 from src.models import ImgCapModel
 from src.train import train_imgcap_network, eval_imgcap_network
+from src.loaders import get_kmeans_from_embedding
 
 
 def run_img_cap_learning(config=None, model=None, add_string=''):
@@ -13,6 +14,11 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
         config = get_exp_config()
     if model is None:
         model = ImgCapModel(config=config).to(config['device'])
+    date_time = datetime.now().strftime("%m-%d-%Y_%H-%M-%S") + add_string
+    exp_path = f"Experiment_Files/{date_time}"
+    config['exp_path'] = exp_path
+    if not os.path.exists(exp_path):
+        os.makedirs(exp_path)
 
     train_data = train_imgcap_network(config=config, model=model)
     with torch.no_grad():
@@ -20,10 +26,6 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
     print(f"Model trained to {config['epochs']} epochs and achieved evaluation rate of {eval_data} on CIFAR10.")
 
     if config['save_data']:
-        date_time = datetime.now().strftime("%m-%d-%Y_%H-%M-%S") + add_string
-        exp_path = f"Experiment_Files/{date_time}"
-        if not os.path.exists(exp_path):
-            os.makedirs(exp_path)
         data = train_data + [(eval_data, "NA")]
         data = pd.DataFrame(data)
         data.to_csv(f"{exp_path}/data.csv")

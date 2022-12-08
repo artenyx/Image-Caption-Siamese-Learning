@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from src.config import get_exp_config
 from src.models import ImgCapModel
-from src.loaders import get_mscoco_loaders, get_cifar10_loader
+from src.loaders import get_mscoco_loaders, get_cifar10_loader, get_kmeans_from_embedding
 
 
 def standardize(tensor):
@@ -69,18 +69,22 @@ def run_epoch_image_caption(model, config, batches_to_run=10000, grad=True):
         model.train()
     else:
         model.eval()
-    for i, (img, cap) in enumerate(loader):
+    for i, (img, img_aug, cap) in enumerate(loader):
         cap = tokenize_text(cap, tokenizer).to(config['device'])
         img = img.to(config['device'])
         img_emb, cap_emb = model(img.to(config['device']), cap)
-
-        if grad:
+        if config['new_method']:
+            img_aug.to(config['device'])
+            img_aug_emb = model.encode_image(img_aug)
+            optimizer.zero_grad()
+            loss = torch.sum(simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam']) +
+                             config['alpha'] * simclr_loss_func(img_emb, img_aug_emb, lam=config['simclr_lam']))
+        else:
             optimizer.zero_grad()
             loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
+        if grad:
             loss.backward()
             optimizer.step()
-        else:
-            loss = simclr_loss_func(img_emb, cap_emb, lam=config['simclr_lam'])
 
         running_loss += loss.item()
 
@@ -119,6 +123,7 @@ def eval_imgcap_network(model=None, config=None):
     cifar_labels = config['cifar_labels']
     prompts = {k: f"A photo of a {v}" for k, v in cifar_labels.items()}
     cifar10_loader = get_cifar10_loader(config=config)
+    get_kmeans_from_embedding(config, model, cifar10_loader)
 
     correct = 0
     for i, (img, label) in enumerate(cifar10_loader):

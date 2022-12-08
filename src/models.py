@@ -142,11 +142,18 @@ class ImgCapModel(nn.Module):
         self.flatten = nn.Flatten()
         self.lm_linear = nn.LazyLinear(self.latent_dim)
 
-    def forward(self, img, cap):
+    def encode_image(self, img):
         img = self.vis_model(img)
+        return img
+
+    def encode_text(self, cap):
         cap = self.gpt2_mod(**cap)
         cap = cap.last_hidden_state
         cap = self.flatten(cap)
         cap = self.lm_linear(cap)
+        return cap
 
+    def forward(self, img, cap):
+        img = self.encode_img(img)
+        cap = self.encode_cap(cap)
         return img, cap
