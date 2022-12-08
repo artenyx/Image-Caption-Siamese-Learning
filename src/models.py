@@ -119,7 +119,7 @@ class SimpleViT(nn.Module):
         x = x.mean(dim=1)
 
         x = self.to_latent(x)
-        return
+        return x
 
 
 class ImgCapModel(nn.Module):
