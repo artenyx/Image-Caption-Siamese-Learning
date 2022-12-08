@@ -34,7 +34,7 @@ def run_img_cap_learning(config=None, model=None, add_string=''):
 
 def epoch_exp():
     #epoch_list = [5, 10, 15, 20]
-    epoch_list = [20]
+    epoch_list = [10]
     for epoch in epoch_list:
         current_time = datetime.now().strftime("%H:%M:%S")
         print(f"Starting at {current_time}")
