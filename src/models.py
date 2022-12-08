@@ -155,5 +155,5 @@ class ImgCapModel(nn.Module):
 
     def forward(self, img, cap):
         img = self.encode_image(img)
-        cap = self.encode_cap(cap)
+        cap = self.encode_text(cap)
         return img, cap
